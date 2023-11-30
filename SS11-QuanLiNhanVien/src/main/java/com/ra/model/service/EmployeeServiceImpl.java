@@ -7,11 +7,14 @@ import com.ra.model.entity.Employee;
 import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeDAO employeeDAO = new EmployeeDAOImpl();
+    private EmployeeDAOImpl employeeDAO = new EmployeeDAOImpl();
 
     @Override
-    public List<Employee> findAll() {
-        return employeeDAO.findAll();
+    public List<Employee> findAll(int noPage) {
+        return employeeDAO.findAll(noPage);
+    }
+    public int getTotal(){
+        return employeeDAO.totalPage;
     }
 
     @Override
@@ -38,4 +41,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void delete(Integer integer) {
         employeeDAO.delete(integer);
     }
+
+
 }

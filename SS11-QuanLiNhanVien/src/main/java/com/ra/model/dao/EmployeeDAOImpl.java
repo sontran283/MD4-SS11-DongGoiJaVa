@@ -3,22 +3,25 @@ package com.ra.model.dao;
 import com.ra.model.entity.Employee;
 import com.ra.util.ConnectionDB;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
+    public int LIMIT = 3;
+    public int totalPage = 0;
     @Override
-    public List<Employee> findAll() {
+    public List<Employee> findAll(int noPage) {
         Connection connection = null;
         List<Employee> employees = new ArrayList<>();
         connection = ConnectionDB.openConnection();
         try {
-            CallableStatement callableStatement = connection.prepareCall("{CALL SHOW_EMPLOYEE}");
+            CallableStatement callableStatement = connection.prepareCall("{CALL PAGI_EMPLOYEE(?,?,?)}");
+            callableStatement.setInt(1,LIMIT);
+            callableStatement.setInt(2,noPage);
+            callableStatement.setInt(3, Types.INTEGER); //tham so out
             ResultSet resultSet = callableStatement.executeQuery();
+            this.totalPage = callableStatement.getInt(3);
             while (resultSet.next()) {
                 Employee employee = new Employee();
                 employee.setId(resultSet.getInt("id"));
@@ -50,14 +53,18 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public Employee findById(Integer integer) {
+        if (integer == null){
+            return null;
+        }
         Connection connection = null;
-        Employee employee = new Employee();
+        Employee employee = null;
         connection = ConnectionDB.openConnection();
         try {
             CallableStatement callableStatement = connection.prepareCall("{CALL FIND_BY_ID(?)}");
             callableStatement.setInt(1, integer);
             ResultSet resultSet = callableStatement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
+                employee = new Employee();
                 employee.setId(resultSet.getInt("id"));
                 employee.setName(resultSet.getString("name"));
                 employee.setPhone(resultSet.getString("phone"));
@@ -80,7 +87,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         List<Employee> employees = new ArrayList<>();
         try {
             connection = ConnectionDB.openConnection();
-            if (integer == null) {
+            if (findById(integer) == null) {
                 CallableStatement callableStatement = connection.prepareCall("{CALL ADD_EMPLOYEE(?,?,?,?,?,?)}");
                 callableStatement.setString(1, employee.getName());
                 callableStatement.setString(2, employee.getPhone());

@@ -18,7 +18,7 @@
     <a href="Employee">Back to employee list</a>
 </p>
 <h1 class="text-center text-danger">Thêm mới nhân viên</h1>
-<form action="<%=request.getContextPath()%>/Employee" method="POST">
+<form action="<%=request.getContextPath()%>/Employee?noPage=1" method="POST">
     <div class="form-group">
         <label for="name">name: </label>
         <input type="text" class="form-control" id="name" name="name">

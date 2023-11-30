@@ -91,6 +91,24 @@
     button:hover {
         background-color: #45a049;
     }
+    div {
+        text-align: center; /* Center the links */
+    }
+
+    div a {
+        display: inline-block; /* Display links in a row */
+        margin: 5px; /* Add some space between links */
+        padding: 8px 12px; /* Add padding to the links */
+        text-decoration: none; /* Remove underline from links */
+        border: 1px solid #333; /* Add a border to the links */
+        border-radius: 5px; /* Add rounded corners to the links */
+        background-color: #f0f0f0; /* Set background color for the links */
+        color: #333; /* Set text color for the links */
+    }
+
+    div a:hover {
+        background-color: #ddd; /* Change background color on hover */
+    }
 </style>
 <body>
 <h2>User</h2>
@@ -119,10 +137,17 @@
             <td>${item.sex ? "nam" : "nữ"}</td>
             <td>${item.salary}</td>
             <td><a href="/Employee?action=edit&id=${item.id}">Edit</a></td>
-            <td><a href="/Employee?action=delete&id=${item.id}" onclick="return confirm('Are you sure?')">Delete</a>
+            <td><a href="/Employee?action=delete&id=${item.id}&noPage=1" onclick="return confirm('Are you sure?')">Delete</a>
             </td>
         </tr>
     </c:forEach>
 </table>
+<div>
+    <div id="pagination">
+        <c:forEach var="i" begin="1" end="${totalPage}">
+            <a href="Employee?noPage=${i}" class="pagination-link">${i}</a>
+        </c:forEach>
+    </div>
+</div>
 </body>
 </html>

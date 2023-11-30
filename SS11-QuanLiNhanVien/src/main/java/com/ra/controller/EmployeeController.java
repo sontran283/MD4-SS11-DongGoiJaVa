@@ -13,7 +13,7 @@ import java.util.List;
 
 @WebServlet(name = "EmployeeController", value = "/Employee")
 public class EmployeeController extends HttpServlet {
-    private final EmployeeService employeeService = new EmployeeServiceImpl();
+    private final EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -61,21 +61,22 @@ public class EmployeeController extends HttpServlet {
                 request.getParameter("views/employee_add.jsp");
             }
         }
-        if (action.equals("edit")){
+        else if (action.equals("edit")) {
             editEmployeePost(request, response);
         }
     }
 
     private void editEmployeePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int idEdit = Integer.parseInt(request.getParameter("id"));
+        System.out.println(idEdit);
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         Date birthday = Date.valueOf(request.getParameter("birthday"));
-        boolean sex = Boolean.valueOf(request.getParameter("sex"));
+        boolean sex = Boolean.parseBoolean(request.getParameter("sex"));
         double salary = Double.parseDouble(request.getParameter("salary"));
         Employee employee = new Employee(idEdit, name, phone, address, birthday, sex, salary);
-        if (employeeService.saveOrUpDate(employee, idEdit)) {
+        if (employeeService.saveOrUpDate(employee, employee.getId())) {
             showListEmployee(request, response);
         } else {
             request.getParameter("views/employee_edit.jsp");
@@ -83,8 +84,11 @@ public class EmployeeController extends HttpServlet {
     }
 
     public void showListEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Employee> employees = employeeService.findAll();
+        int noPage = Integer.parseInt(request.getParameter("noPage"));
+        List<Employee> employees = employeeService.findAll(noPage);
+        int totalPage = employeeService.getTotal();
         request.setAttribute("list_employee", employees);
+        request.setAttribute("totalPage", totalPage);
         request.getRequestDispatcher("views/employee_list.jsp").forward(request, response);
     }
 }

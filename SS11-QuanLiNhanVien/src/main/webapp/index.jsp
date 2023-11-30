@@ -8,6 +8,6 @@
 <h1><%= "EMPLOYEE!" %>
 </h1>
 <br/>
-<a href="Employee">Employee</a>
+<a href="Employee?noPage=1">Employee</a>
 </body>
 </html>

@@ -18,7 +18,7 @@
     <a href="Employee">Back to employee list</a>
 </p>
 <h1 class="text-center text-danger">Sửa nhân viên</h1>
-<form action="<%=request.getContextPath()%>/Employee" method="POST">
+<form action="<%=request.getContextPath()%>/Employee?noPage=1" method="POST">
     <input type="hidden" name="id" value="${employee.id}">
     <div class="form-group">
         <label for="name">name: </label>
@@ -47,7 +47,7 @@
         <label for="salary">salary: </label>
         <input type="text" class="form-control" id="salary" name="salary" value="${employee.salary}">
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" name="action" value="edit" class="btn btn-primary">Add</button>
 </form>
 </body>
 </html>

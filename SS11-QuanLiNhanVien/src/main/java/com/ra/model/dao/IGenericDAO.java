@@ -3,7 +3,7 @@ package com.ra.model.dao;
 import java.util.List;
 
 public interface IGenericDAO<T, ID> {
-    List<T> findAll();
+    List<T> findAll(int noPage);
 
     List<T> findByName(String name);
 
